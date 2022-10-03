@@ -1,37 +1,28 @@
-import pyfiglet
-import sys
-import socket
+import optparse
+from socket import *
 
-banner = pyfiglet.figlet_format("SCANNER")
-print(banner)
+def connScan(tgtHost, tgtPort):
+ try:
+  connSkt = socket(AF_INET, SOCK_STREAM)
+  connSkt.connect((tgtHost, tgtPort))
+  print ('[+]%d/tcp open'% tgtPort)
+  connSkt.close()
+ except:
+  print ('[-]%d/tcp closed'% tgtPort)
 
-target = str(0)
+def portScan(tgtHost, tgtPorts):
+ try:
+  tgtIP = gethostbyname(tgtHost)
+ except:
+  print ("[-] Cannot resolve '%s': Unknown host"%tgtHost)
+  return
+ try:
+  tgtName = gethostbyaddr(tgtIP)
+  print ('\n[+] Scan Results for: ' + tgtName[0])
+ except:
+  print ('\n[+] Scan Results for: ' + tgtIP)
+ setdefaulttimeout(1)
+ for tgtPort in tgtPorts:
+  print ('Scanning port ' + tgtPort)
 
-if len(sys.argv) == 3:
-	target = socket.gethostbyname(sys.argv[1])
-else:
-	print("Argument(less)")
-
-# Add Banner
-print("\n")
-print("Scanning Target: " + target)
-print("\n")
-
-try:
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	socket.setdefaulttimeout(1)
-	port = int(sys.argv[2])
-	result = s.connect_ex((target,port))
-	if result == 0:
-		print ('[+] %d/tcp open'% port)
-	s.close()
-		
-except KeyboardInterrupt:
-		print("\n Ctrl - C(ed)")
-		sys.exit()
-except socket.gaierror:
-		print("\n Unable to resolve host")
-		sys.exit()
-except socket.error:
-		print("\ Server Down")
-		sys.exit()
+connScan("10.10.11.180", int(90))
