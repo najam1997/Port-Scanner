@@ -1,28 +1,28 @@
 import optparse
 from socket import *
 
-def connScan(tgtHost, tgtPort):
+def Scan(Host_IP, Port):
  try:
-  connSkt = socket(AF_INET, SOCK_STREAM)
-  connSkt.connect((tgtHost, tgtPort))
-  print ('[+]%d/tcp open'% tgtPort)
-  connSkt.close()
+  connect_socket = socket(AF_INET, SOCK_STREAM)
+  connect_socket.connect((Host_IP, Port))
+  print ('Port %d is open'% Port)
+  connect_socket.close()
  except:
-  print ('[-]%d/tcp closed'% tgtPort)
+  print ('Port %d is closed'% Port)
 
-def portScan(tgtHost, tgtPorts):
+def portScan(Host, Ports):
  try:
-  tgtIP = gethostbyname(tgtHost)
+  IP = gethostbyname(Host)
  except:
-  print ("[-] Cannot resolve '%s': Unknown host"%tgtHost)
+  print ("Unable to resolve host '%s'" %Host)
   return
  try:
-  tgtName = gethostbyaddr(tgtIP)
-  print ('\n[+] Scan Results for: ' + tgtName[0])
+  Name = gethostbyaddr(IP)
+  print ('\n Results for the scan of Host: ' + Name[0])
  except:
-  print ('\n[+] Scan Results for: ' + tgtIP)
+  print ('\n Results for the scan of IP: ' + tgtIP)
  setdefaulttimeout(1)
- for tgtPort in tgtPorts:
-  print ('Scanning port ' + tgtPort)
+ for Port in Ports:
+  print ('Scanning port ' + Port)
 
-connScan("10.10.11.180", int(90))
+Scan("10.10.11.180", int(90))
