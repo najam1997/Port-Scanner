@@ -8,7 +8,7 @@ def Scan(Host_IP, Port):
   print ('Port %d is open'% Port)
   connect_socket.close()
  except:
-  print ('Port %d is closed'% Port)
+  print ('Port %d is closed'% int(Port))
 
 def portScan(Host, Ports):
  try:
@@ -18,11 +18,26 @@ def portScan(Host, Ports):
   return
  try:
   Name = gethostbyaddr(IP)
-  print ('\n Results for the scan of Host: ' + Name[0])
+  print ('\nResults for the scan of Host: ' + Name[0])
  except:
-  print ('\n Results for the scan of IP: ' + tgtIP)
+  print ('\nResults for the scan of IP: ' + Host)
  setdefaulttimeout(1)
+ 
  for Port in Ports:
-  print ('Scanning port ' + Port)
+  print ("Scanning port " + Port)
+  Scan(Host, int(Port))
 
-Scan("10.10.11.180", int(90))
+def main():
+ psr = optparse.OptionParser()
+ psr.add_option('-h', dest='Host_IP', type='string')
+ psr.add_option('-p', dest='Port', type='string')
+ (options, args) = psr.parse_args()
+ Host_IP = options.Host_IP
+ Ports = str(options.Port).split(', ')
+ if (Host_IP == None) | (Ports[0] == None):
+  print ('No port specified')
+  exit(0)
+ portScan(Host_IP, Ports)
+ 
+if __name__ == '__main__':
+ main() 
